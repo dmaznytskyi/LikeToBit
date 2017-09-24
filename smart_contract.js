@@ -6,6 +6,27 @@ contract LikeToBit
 	address advertisingWallet;
 	address blogerWallet;
 	
+	struct Utab
+    {
+        address   addr;
+        uint64    insta_id;
+        string    hashtag;
+        uint8     curr_likes;
+        uint      eth;
+        uint32    post_id;
+    }
+
+    struct Advtab
+    {
+        address  addr;
+        string   hashtag;
+        uint      budget;
+        uint16   date_end;
+        byte      isActive;
+    }
+	
+	Advtab[] public advtabs;
+	
 	// exchange rate ETH/Likes
 	uint8 ethPLikes = 1;
 	
@@ -31,11 +52,14 @@ contract LikeToBit
     // @param _ethValue ads budget
     // @param _hashtag ads hashtag
     // @param _endDate ads end date
-	function createAdsItem(uint _ethValue, string _hashtag, uint8 _endDate)
-	 returns(bool sufficient)
+	function createAdsItem(uint64 _insta_id, uint _ethValue, string _hashtag, 
+	    uint16 _date_end, byte _isActive) returns(bool sufficient)
 	{
-	    // some code to write data to array
 	    
+	    //write date to array
+	    advtabs[advtabs.length++] = Advtab({addr: msg.sender, hashtag: _hashtag, 
+	                budget: _ethValue, date_end: _date_end, isActive: _isActive});
+           
 	    //send ethereum to advertisingWallet
         sendCoin(msg.sender, advertisingWallet, _ethValue);
 	}
