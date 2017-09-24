@@ -9,11 +9,11 @@ contract LikeToBit
 	struct Utab
     {
         address   addr;
-        uint64    insta_id;
+        uint64    instaId;
         string    hashtag;
-        uint8     curr_likes;
+        uint8     currLikes;
         uint      eth;
-        uint32    post_id;
+        uint32    postId;
     }
 
     struct Advtab
@@ -26,6 +26,7 @@ contract LikeToBit
     }
 	
 	Advtab[] public advtabs;
+	Utab[] public utabs;
 	
 	// exchange rate ETH/Likes
 	uint8 ethPLikes = 1;
@@ -83,12 +84,22 @@ contract LikeToBit
 	// @param _postID instagram post id
 	// @param _hashtag advertising hashtag
 	// @param _likes from post
-	function setLikesAdsItem(uint8 _postID, string _hashtag, uint8 _likes)
+	function setLikesAdsItem(uint64 _instaID, uint8 _postId, string _hashtag, uint8 _currLikes)
 	    returns(bool sufficient)
 	{
+	    
 	    uint ethValue = 0;
+	    uint8 proofLike = _currLikes;
+	    
+	    //we need to calculate or/and check reale likes
+	    ethValue = ethPLikes * proofLike;
 	    address adsAddress;
-	    //some code
+	    
+	    if(ethValue <= 0)
+	        return false;
+	    
+	     utabs[utabs.length++] = Utab({addr: msg.sender, instaId: _instaID, 
+	            hashtag: _hashtag, currLikes: _currLikes, eth: ethValue, postId: _postId});
 	    
 	    //transaction ethereum from ads to bloger
 	    if(ethValue > 0)
